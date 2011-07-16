@@ -6,6 +6,7 @@ typedef struct {
 } MS_t;
 
 void MS_init(state_t * s);
+void MS_update(state_t * s, Uint32 elapsedTime);
 void MS_handleEvent(state_t * s);
 void MS_draw(state_t * s, SDL_Surface * surface);
 void MS_clean(state_t * s);
@@ -14,6 +15,7 @@ state_t * MS_get()
 {
 	state_t * state = malloc(sizeof(*state));
 	state->init = MS_init;
+	state->update = MS_update;
 	state->handleEvent = MS_handleEvent;
 	state->draw = MS_draw;
 	state->clean = MS_clean;
@@ -28,6 +30,12 @@ void MS_init(state_t * s)
 	data->image = IMG_Load("images/title.png");
 	
 	s->data = data;
+}
+
+void MS_update(state_t * s, Uint32 elapsedTime)
+{
+	s = s;
+	elapsedTime = elapsedTime;
 }
 
 void MS_handleEvent(state_t * s)

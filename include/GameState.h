@@ -6,6 +6,7 @@
 
 typedef struct _state_t {
 	void (*init)(struct _state_t * s);
+	void (*update)(struct _state_t * s, Uint32 elapsedTime);
 	void (*handleEvent)(struct _state_t * s);
 	void (*draw)(struct _state_t * s, SDL_Surface * surface);
 	void (*clean)(struct _state_t * s);

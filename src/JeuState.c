@@ -6,6 +6,7 @@ typedef struct {
 } JS_t;
 
 void JS_init(state_t * s);
+void JS_update(state_t * s, Uint32 elapsedTime);
 void JS_handleEvent(state_t * s);
 void JS_draw(state_t * s, SDL_Surface * surface);
 void JS_clean(state_t * s);
@@ -14,12 +15,19 @@ state_t * JS_get()
 {
 	state_t * state = malloc(sizeof(*state));
 	state->init = JS_init;
+	state->update = JS_update;
 	state->handleEvent = JS_handleEvent;
 	state->draw = JS_draw;
 	state->clean = JS_clean;
 	state->data = NULL;
 	
 	return state;
+}
+
+void JS_update(state_t * s, Uint32 elapsedTime)
+{
+	s = s;
+	elapsedTime = elapsedTime;
 }
 
 void JS_init(state_t * s)
