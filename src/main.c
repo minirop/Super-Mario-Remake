@@ -4,13 +4,15 @@
 #include "GameState.h"
 #include "MainState.h"
 
-#define BLOC_SIZE 16
-#define SCREEN_W 160
-#define SCREEN_H 144
+#define BLOC_SIZE		16
+#define SCREEN_W		160
+#define SCREEN_H		144
+#define REFRESH_TIME	30
 
 int main(int argc, char** argv)
 {
 	SDL_Surface * ecran = NULL;
+	Uint32 lastUpdate = 0, currentTime = 0, elapsedTime = 0;
 	
 	argc = argc;
 	argv = argv;
@@ -23,8 +25,17 @@ int main(int argc, char** argv)
 	
 	GS_PushState(MS_get());
 	
+	GS_handleEvent();
 	while(!GS_isEmpty())
 	{
+		currentTime = SDL_GetTicks();
+		elapsedTime = currentTime - lastUpdate;
+		if(elapsedTime > REFRESH_TIME)
+		{
+			GS_update(elapsedTime);
+			lastUpdate = currentTime;
+		}
+		
 		GS_draw(ecran);
 		SDL_Flip(ecran);
 		

@@ -1,8 +1,10 @@
 #include "JeuState.h"
+#include "Mario.h"
 
 typedef struct {
 	SDL_Surface * fond;
 	SDL_Rect pos;
+	Mario * mario;
 } JS_t;
 
 void JS_init(state_t * s);
@@ -26,8 +28,9 @@ state_t * JS_get()
 
 void JS_update(state_t * s, Uint32 elapsedTime)
 {
-	s = s;
-	elapsedTime = elapsedTime;
+	JS_t * m = s->data;
+	
+	Mario_update(m->mario, elapsedTime);
 }
 
 void JS_init(state_t * s)
@@ -38,6 +41,9 @@ void JS_init(state_t * s)
 	data->pos.y = 80;
 	data->pos.h = 144;
 	data->pos.w = 160;
+	data->mario = malloc(sizeof(*(data->mario)));
+	
+	Mario_init(data->mario);
 	
 	s->data = data;
 }
@@ -46,6 +52,7 @@ void JS_handleEvent(state_t * s)
 {
 	SDL_Event event;
 	int continuer = 1;
+	JS_t * m = s->data;
 	
 	s = s;
 	
@@ -65,6 +72,25 @@ void JS_handleEvent(state_t * s)
 						GS_PopState();
 						continuer = 0;
 						break;
+					case SDLK_LEFT:
+						Mario_move_left(m->mario, 1);
+						break;
+					case SDLK_RIGHT:
+						Mario_move_right(m->mario, 1);
+						break;
+					default:
+						;
+				}
+				break;
+			case SDL_KEYUP:
+				switch(event.key.keysym.sym)
+				{
+					case SDLK_LEFT:
+						Mario_move_left(m->mario, 0);
+						break;
+					case SDLK_RIGHT:
+						Mario_move_right(m->mario, 0);
+						break;
 					default:
 						;
 				}
@@ -78,11 +104,13 @@ void JS_handleEvent(state_t * s)
 void JS_draw(state_t * s, SDL_Surface * surface)
 {
 	JS_t * m = s->data;
-	SDL_BlitSurface(m->fond, &m->pos, surface, NULL);
+	SDL_BlitSurface(m->fond, &(m->pos), surface, NULL);
+	Mario_draw(m->mario, surface, m->pos);
 }
 
 void JS_clean(state_t * s)
 {
 	JS_t * m = s->data;
 	SDL_FreeSurface(m->fond);
+	Mario_clean(m->mario);
 }

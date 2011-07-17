@@ -51,6 +51,11 @@ void GS_handleEvent()
 	head->state->handleEvent(head->state);
 }
 
+void GS_update(Uint32 elapsedTime)
+{
+	head->state->update(head->state, elapsedTime);
+}
+
 void GS_draw(SDL_Surface * surface)
 {
 	head->state->draw(head->state, surface);
