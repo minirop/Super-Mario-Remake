@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 	{
 		currentTime = SDL_GetTicks();
 		elapsedTime = currentTime - lastUpdate;
-		if(elapsedTime > REFRESH_TIME)
+		if(elapsedTime >= REFRESH_TIME)
 		{
 			GS_update(elapsedTime);
 			lastUpdate = currentTime;

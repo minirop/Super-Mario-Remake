@@ -5,6 +5,7 @@
 typedef struct {
 	SDL_Surface * fond;
 	SDL_Rect pos;
+	int ymax;
 	Mario * mario;
 } JS_t;
 
@@ -43,6 +44,7 @@ void JS_init(state_t * s)
 	data->pos.h = 144;
 	data->pos.w = 160;
 	data->mario = malloc(sizeof(*(data->mario)));
+	data->ymax = 224;
 	
 	Mario_init(data->mario);
 	
@@ -103,6 +105,7 @@ void JS_handleEvent(state_t * s)
 		SDL_Rect frame_rect = m->mario->animation[m->mario->currentAnimation].frames[m->mario->currentFrame];
 		int px = (SCREEN_W - frame_rect.w) / 2;
 		int py = (SCREEN_H - frame_rect.h) / 2;
+		int pymax = m->ymax - SCREEN_H;
 		
 		if(m->mario->position.x < px)
 		{
@@ -116,6 +119,10 @@ void JS_handleEvent(state_t * s)
 		if(m->mario->position.y < py)
 		{
 			m->pos.y = 0;
+		}
+		else if(m->mario->position.y > pymax)
+		{
+			m->pos.y = pymax;
 		}
 		else
 		{
