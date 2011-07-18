@@ -102,6 +102,8 @@ void JS_handleEvent(state_t * s)
 	{
 		SDL_Rect frame_rect = m->mario->animation[m->mario->currentAnimation].frames[m->mario->currentFrame];
 		int px = (SCREEN_W - frame_rect.w) / 2;
+		int py = (SCREEN_H - frame_rect.h) / 2;
+		
 		if(m->mario->position.x < px)
 		{
 			m->pos.x = 0;
@@ -109,6 +111,15 @@ void JS_handleEvent(state_t * s)
 		else
 		{
 			m->pos.x = m->mario->position.x - px;
+		}
+		
+		if(m->mario->position.y < py)
+		{
+			m->pos.y = 0;
+		}
+		else
+		{
+			m->pos.y = m->mario->position.y - py;
 		}
 	}
 }
