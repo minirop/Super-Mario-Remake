@@ -2,7 +2,7 @@
 
 void Mario_init(Mario * mario)
 {
-	SDL_Rect * frames = malloc(sizeof(*frames));
+	SDL_Rect * frames = NULL;
 	
 	mario->image = IMG_Load("images/mario.png");
 	mario->currentAnimation = IDLE_SMALL_RIGHT;
@@ -13,6 +13,8 @@ void Mario_init(Mario * mario)
 	mario->position.x = 0;
 	mario->position.y = 192;
 	
+	/* IDLE_SMALL_RIGHT */
+	frames = malloc(sizeof(*frames));
 	frames[0].x = 211;
 	frames[0].y = 0;
 	frames[0].w = 13;
@@ -20,6 +22,24 @@ void Mario_init(Mario * mario)
 	mario->animation[IDLE_SMALL_RIGHT].frames = frames;
 	mario->animation[IDLE_SMALL_RIGHT].countFrame = 1;
 	mario->animation[IDLE_SMALL_RIGHT].delay = 0;
+	
+	/* WALKING_SMALL_RIGHT */
+	frames = malloc(sizeof(*frames) * 3);
+	frames[0].x = 241;
+	frames[0].y = 0;
+	frames[0].w = 14;
+	frames[0].h = 15;
+	frames[1].x = 272;
+	frames[1].y = 0;
+	frames[1].w = 12;
+	frames[1].h = 16;
+	frames[2].x = 300;
+	frames[2].y = 0;
+	frames[2].w = 16;
+	frames[2].h = 16;
+	mario->animation[WALKING_SMALL_RIGHT].frames = frames;
+	mario->animation[WALKING_SMALL_RIGHT].countFrame = 3;
+	mario->animation[WALKING_SMALL_RIGHT].delay = 50;
 }
 
 void Mario_move_left(Mario * mario, int move)
@@ -45,12 +65,15 @@ void Mario_move_right(Mario * mario, int move)
 		if(move == 0 && mario->direction == RIGHT)
 		{
 			mario->is_moving = 0;
+			mario->currentAnimation = IDLE_SMALL_RIGHT;
+			mario->currentFrame = 0;
 		}
 	}
 	else
 	{
 		mario->is_moving = 1;
 		mario->direction = RIGHT;
+		mario->currentAnimation = WALKING_SMALL_RIGHT;
 	}
 }
 
@@ -58,6 +81,13 @@ void Mario_update(Mario * mario, Uint32 timeElapsed)
 {
 	if(mario->is_moving == 1)
 	{
+		mario->lastUpdate += timeElapsed;
+		if(mario->lastUpdate > mario->animation[mario->currentAnimation].delay)
+		{
+			mario->currentFrame = (mario->currentFrame + 1) % mario->animation[mario->currentAnimation].countFrame;
+			mario->lastUpdate -= mario->animation[mario->currentAnimation].delay;
+		}
+		
 		if(mario->direction == RIGHT)
 		{
 			mario->position.x += (mario->speed * timeElapsed * 0.1);
@@ -69,8 +99,6 @@ void Mario_update(Mario * mario, Uint32 timeElapsed)
 				mario->position.x = 0;
 		}
 	}
-	
-	timeElapsed = timeElapsed;
 }
 
 void Mario_draw(Mario * mario, SDL_Surface * surface, SDL_Rect offset)
