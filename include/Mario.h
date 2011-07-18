@@ -38,7 +38,7 @@ typedef struct {
 	SDL_Rect position;
 	int direction;
 	int is_moving;
-	int speed;
+	float speed;
 } Mario;
 
 void Mario_init(Mario * mario);

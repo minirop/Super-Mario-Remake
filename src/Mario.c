@@ -8,7 +8,7 @@ void Mario_init(Mario * mario)
 	mario->currentAnimation = IDLE_SMALL_RIGHT;
 	mario->direction = RIGHT;
 	mario->is_moving = 0;
-	mario->speed = 1;
+	mario->speed = 0.12;
 	mario->currentFrame = 0;
 	mario->position.x = 0;
 	mario->position.y = 192;
@@ -39,7 +39,7 @@ void Mario_init(Mario * mario)
 	frames[2].h = 16;
 	mario->animation[WALKING_SMALL_RIGHT].frames = frames;
 	mario->animation[WALKING_SMALL_RIGHT].countFrame = 3;
-	mario->animation[WALKING_SMALL_RIGHT].delay = 50;
+	mario->animation[WALKING_SMALL_RIGHT].delay = 120;
 }
 
 void Mario_move_left(Mario * mario, int move)
@@ -53,8 +53,11 @@ void Mario_move_left(Mario * mario, int move)
 	}
 	else
 	{
-		mario->is_moving = 1;
-		mario->direction = LEFT;
+		if(move == 1)
+		{
+			mario->is_moving = 1;
+			mario->direction = LEFT;
+		}
 	}
 }
 
@@ -71,9 +74,12 @@ void Mario_move_right(Mario * mario, int move)
 	}
 	else
 	{
-		mario->is_moving = 1;
-		mario->direction = RIGHT;
-		mario->currentAnimation = WALKING_SMALL_RIGHT;
+		if(move == 1)
+		{
+			mario->is_moving = 1;
+			mario->direction = RIGHT;
+			mario->currentAnimation = WALKING_SMALL_RIGHT;
+		}
 	}
 }
 
@@ -90,11 +96,11 @@ void Mario_update(Mario * mario, Uint32 timeElapsed)
 		
 		if(mario->direction == RIGHT)
 		{
-			mario->position.x += (mario->speed * timeElapsed * 0.1);
+			mario->position.x += (mario->speed * timeElapsed);
 		}
 		else
 		{
-			mario->position.x -= (mario->speed * timeElapsed * 0.1);
+			mario->position.x -= (mario->speed * timeElapsed);
 			if(mario->position.x < 0)
 				mario->position.x = 0;
 		}
