@@ -1,5 +1,6 @@
 #include "JeuState.h"
 #include "Mario.h"
+#include "config.h"
 
 typedef struct {
 	SDL_Surface * fond;
@@ -54,8 +55,6 @@ void JS_handleEvent(state_t * s)
 	int continuer = 1;
 	JS_t * m = s->data;
 	
-	s = s;
-	
 	while(continuer && SDL_PollEvent(&event))
 	{
 		switch(event.type)
@@ -97,6 +96,19 @@ void JS_handleEvent(state_t * s)
 				break;
 			default:
 				;
+		}
+	}
+	
+	{
+		SDL_Rect frame_rect = m->mario->animation[m->mario->currentAnimation].frames[m->mario->currentFrame];
+		int px = (SCREEN_W - frame_rect.w) / 2;
+		if(m->mario->position.x < px)
+		{
+			m->pos.x = 0;
+		}
+		else
+		{
+			m->pos.x = m->mario->position.x - px;
 		}
 	}
 }

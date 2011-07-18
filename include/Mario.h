@@ -26,7 +26,6 @@ enum {
 typedef struct {
 	SDL_Rect * frames;
 	int countFrame;
-	int currentFrame;
 	int delay;
 } Animation;
 
@@ -34,6 +33,7 @@ typedef struct {
 	SDL_Surface * image;
 	Animation animation[NUMBER_OF_ANIMATION];
 	int currentAnimation;
+	int currentFrame;
 	SDL_Rect position;
 	int direction;
 	int is_moving;
